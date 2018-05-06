@@ -79,13 +79,18 @@ public class GlobeSortServer {
     static class GlobeSortImpl extends GlobeSortGrpc.GlobeSortImplBase {
         @Override
         public void ping(Empty req, final StreamObserver<Empty> responseObserver) {
+            long beginTime = System.currentTimeMillis();
             Empty response = Empty.newBuilder().build();
             responseObserver.onNext(response);
             responseObserver.onCompleted();
+            long endTime = System.currentTimeMillis();
+            double periodTime = (endTime - beginTime) * 1.0 / 1000;
+            System.out.println("periodTime in server ping: " + periodTime);
         }
 
         @Override
         public void sortIntegers(IntArray req, final StreamObserver<IntArray> responseObserver) {
+            long beginTime = System.currentTimeMillis();
             Integer[] values = req.getValuesList().toArray(new Integer[req.getValuesList().size()]);
             Arrays.sort(values);
             IntArray.Builder responseBuilder = IntArray.newBuilder();
@@ -95,6 +100,9 @@ public class GlobeSortServer {
             IntArray response = responseBuilder.build();
             responseObserver.onNext(response);
             responseObserver.onCompleted();
+            long endTime = System.currentTimeMillis();
+            double periodTime = (endTime - beginTime) * 1.0 / 1000;
+            System.out.println("periodTime in server sortInteger: " + periodTime);
         }
     }
 }
